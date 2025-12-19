@@ -1,3 +1,4 @@
+import json
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message, CallbackQuery
 from telebot import types
@@ -58,8 +59,24 @@ async def exits(call: CallbackQuery, bot: AsyncTeleBot):
     await button(call.message, bot)
 
 
+async def answer_question(call: CallbackQuery, bot: AsyncTeleBot):
+    with open("texts.json", "r", encoding="utf-8") as f:
+        texts = json.load(f)
+    
+    await bot.delete_message(call.message.chat.id, call.message.message_id)
+    
+    parts = call.data.split("_")
+    section = parts[1]
+    question = parts[2]
+    text = texts[section][question]
+    
+    await bot.send_message(call.message.chat.id, text)
+    
+
+
 def register_all_handlers(bot: AsyncTeleBot):
     bot.register_message_handler(start, commands=["start"], pass_bot=True)
     bot.register_message_handler(button, commands=["button"], pass_bot=True)
     bot.register_callback_query_handler(vibor_1, func= lambda call: call.data.startswith("vibor_"), pass_bot=True)
     bot.register_callback_query_handler(exits, func= lambda call: call.data.startswith("exit"), pass_bot=True)
+    bot.register_callback_query_handler(answer_question, func= lambda call: call.data.startswith("nevibor"), pass_bot=True)
