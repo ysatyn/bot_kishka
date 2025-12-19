@@ -4,7 +4,7 @@ from telebot.types import Message
 
 from handlers import register_all_handlers
 
-bot = AsyncTeleBot(token="7960752246:AAGbHhHQyFpHfpYJd9yFEWtBAN8BY87411Q")
+bot = AsyncTeleBot(token="Так-так-так. Кажется, кто-то хочет украсть мой токен")
 
 async def main():
     register_all_handlers(bot)
