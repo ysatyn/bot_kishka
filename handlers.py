@@ -62,15 +62,29 @@ async def exits(call: CallbackQuery, bot: AsyncTeleBot):
 async def answer_question(call: CallbackQuery, bot: AsyncTeleBot):
     with open("texts.json", "r", encoding="utf-8") as f:
         texts = json.load(f)
-    
+
+    with open("photos.json", "r", encoding="utf-8") as f:
+        photos = json.load(f)
+
     await bot.delete_message(call.message.chat.id, call.message.message_id)
-    
+
     parts = call.data.split("_")
     section = parts[1]
     question = parts[2]
+
     text = texts[section][question]
-    
-    await bot.send_message(call.message.chat.id, text)
+
+    photo_path = photos.get(section, {}).get(question)
+
+    if photo_path:
+        with open(photo_path, 'rb') as photo:
+            await bot.send_photo(
+                call.message.chat.id,
+                photo,
+                caption=text
+            )
+    else:
+        await bot.send_message(call.message.chat.id, text)
     
 
 
