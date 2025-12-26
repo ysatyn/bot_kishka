@@ -81,7 +81,12 @@ async def answer_question(call: CallbackQuery, bot: AsyncTeleBot):
             await bot.send_photo(
                 call.message.chat.id,
                 photo,
-                caption=text
+                caption=text,
+                parse_mode="Markdown"
+
+
+
+
             )
     else:
         await bot.send_message(call.message.chat.id, text)
